@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_coordinator"
+            android:title="@string/coordinator"
+            android:icon="@drawable/ic_home_black_24dp"/>
+
+        <item
+            android:id="@+id/drawer_labels"
+            android:title="@string/floating_labels"/>
+
+        <item
+            android:id="@+id/drawer_fab"
+            android:title="@string/fab"/>
+
+        <item
+            android:id="@+id/drawer_snackbar"
+            android:title="@string/snackbar"/>
+
+        <item
+            android:id="@+id/wallet"
+            android:title="Wallet"
+            android:icon="@drawable/wallet_icon">
+
+        </item>
+
+        <item
+            android:id="@+id/pointingsystem"
+            android:title="Points System">
+
+        </item>
+
+        <item
+            android:id="@+id/drawer_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/share">
+
+        </item>
+
+        <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/logout">
+
+
+    </item>
+
+    </group>
+
+</menu>

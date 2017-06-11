@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary">#F44336</color>
+    <color name="primaryDark">#C62828</color>
+    <color name="window_background">#FFF5F5F5</color>
+    <color name="button_color">#00b300</color>
+    <color name="button_text_color">#ffffff</color>
+    <color name="pink">#ff66a3</color>
+    <color name="indigo">#7300e6</color>
+
+
+
+    <!-- this is for team selsection tabed layout-->
+    <color name="colorPrimary">#125688</color>
+    <color name="colorPrimaryDark">#125688</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#c8e8ff</color>
+
+
+    <!--this is for tab text colour change-->
+    <color name="text_tab_selected">#FF000000</color>
+    <color name="text_tab_unselected">#FF555555</color>
+    <color name="fonts_contests">#f22d1b</color>
+
+    <!-- font colours in login -->
+    <color name="tx_un_fo">#FF000000</color>
+    <color name="tx_fo">#f22d1b</color>
+
 </resources>

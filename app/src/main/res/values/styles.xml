@@ -1,11 +1,66 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="DesignDemo" parent="Base.Theme.DesignDemo">
+    </style>
+
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">#FF4081</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+    <style name="Theme.DesignDemo.Button" parent="Widget.AppCompat.Button.Colored">
+
+        <item name="android:colorButtonNormal">@color/button_color</item>
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+    <style name="Theme.DesignDemo.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+
+        <item name="colorAccent">@color/indigo</item>
+        <item name="android:progressBackgroundTint">@color/pink</item>
+    </style>
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+
+    <!-- this is for team selsection tabed layout-->
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--this is for tab text colour change-->
+    <style name="CustomTabPageIndicator.Text" parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@drawable/tab_tex_color</item>
+
+    </style>
+
+    <!-- this is for alert dailog -->
+
+    <style name="CustomAlertDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/CustomAlertDialogAnimation</item>
+    </style>
+
+    <style name="CustomAlertDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fadein</item>
+        <item name="android:windowExitAnimation">@anim/fadout</item>
+    </style>
+
+    <!--text appearance for floating labels -->
+
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/tx_un_fo</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/cardview_dark_background</item>
+        <item name="colorControlActivated">@color/tx_fo</item>
     </style>
 
 </resources>
