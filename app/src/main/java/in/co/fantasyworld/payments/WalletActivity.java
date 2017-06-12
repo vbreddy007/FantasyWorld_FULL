@@ -11,12 +11,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.applicationtest.vbr.designtest4.R;
-import com.applicationtest.vbr.designtest4.com.vbr.LeaderBoard.Leaderboard;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.leaderboard.LeaderBoard;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -55,7 +56,7 @@ public class WalletActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(WalletActivity.this,Leaderboard.class);
+                Intent i = new Intent(WalletActivity.this,LeaderBoard.class);
                startActivity(i);
             }
         });

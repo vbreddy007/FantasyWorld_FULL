@@ -23,10 +23,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applicationtest.vbr.designtest4.R;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.contests.ContestsAction;
+import in.co.fantasyworld.payments.Payment;
 
 /**
  * Created by C5245675 on 6/3/2017.
@@ -44,10 +48,11 @@ public class TeamSelection extends AppCompatActivity {
     int count = 0;
     Button save_team;
     String teamnameG;
+    String teamOne;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.teamselection2);
+        setContentView(R.layout.teamselection);
 
         viewPager = (ViewPager)findViewById(R.id.viewpager_teamselection2);
         setupViewPager(viewPager);
@@ -61,6 +66,10 @@ public class TeamSelection extends AppCompatActivity {
                 teamnameDialog();
             }
         });
+
+        teamOne = ContestsAction.getTeamOne();
+
+        System.out.println("this is in team selection team one"+teamOne);
 
 
 
@@ -88,7 +97,7 @@ public class TeamSelection extends AppCompatActivity {
                 }
                 else if (tab.getPosition() == 2)
                 {
-                    topimageView.setImageResource(R.drawable.background);
+                    topimageView.setImageResource(R.drawable.splashbackground);
                     select_hint.setText("Please select 2 to 5 bowlers");
                 }
                 else if (tab.getPosition() == 3)
@@ -113,6 +122,11 @@ public class TeamSelection extends AppCompatActivity {
         });
 
 
+    }
+
+    public String getOne()
+    {
+        return teamOne;
     }
     private void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -194,7 +208,7 @@ public class TeamSelection extends AppCompatActivity {
         LayoutInflater li = LayoutInflater.from(this);
         final View promptview = li.inflate(R.layout.teamname_alertdialogview,null);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(TeamSelection2.this).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(TeamSelection.this).create();
         alertDialog.setView(promptview);
        final EditText  _temaname = (EditText)promptview.findViewById(R.id.team_name_dialog);
 
@@ -205,7 +219,7 @@ public class TeamSelection extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(),_temaname.getText().toString(),Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(TeamSelection2.this,SelectCaptian.class);
+                Intent i = new Intent(TeamSelection.this, Payment.class);
 
                 Bundle b = new Bundle();
                 b.putStringArrayList("list",selectedPlayerListName);

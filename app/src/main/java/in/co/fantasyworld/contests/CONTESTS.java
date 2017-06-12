@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.applicationtest.vbr.designtest4.R;
-import com.applicationtest.vbr.designtest4.com.vbr.model.ContestsM;
-import com.applicationtest.vbr.designtest4.com.vbr.teamselection.TeamSelection2;
+
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -28,13 +26,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.models.ContestsModel;
+import in.co.fantasyworld.teamselection.TeamSelection;
+
 
 public class CONTESTS extends Fragment {
 
     RecyclerView recyclerView;
-    List<ContestsM> data_list = new ArrayList<>();
+    List<ContestsModel> data_list = new ArrayList<>();
     CustomAdapter adapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    int matchIDint;
 
 
 
@@ -44,8 +47,11 @@ public class CONTESTS extends Fragment {
         View rootView = inflater.inflate(R.layout.contests_layout, container, false);
         recyclerView = (RecyclerView)rootView.findViewById(R.id.contestsrecyclerView);
         setupRecyclerView(recyclerView);
+        String matchID = ((ContestsAction)getContext()).getMatchID();
 
-getContestsData();
+        matchIDint = Integer.parseInt(matchID);
+        getContestsData(matchIDint);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swiperefreshlayout);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -64,7 +70,7 @@ getContestsData();
     private void reloadAllData()
     {
         data_list.clear();
-        getContestsData();
+        getContestsData(matchIDint);
 
 
         setupRecyclerView(recyclerView);
@@ -81,7 +87,7 @@ getContestsData();
 
     }
 
-    public void getContestsData()
+    public void getContestsData(final int i)
     {
 
         AsyncTask<Void,Void,Void> asyncTask = new AsyncTask<Void,Void,Void>() {
@@ -93,7 +99,7 @@ getContestsData();
                 OkHttpClient client = new OkHttpClient();
                 System.out.println("connection trying");
                 Request request = new Request.Builder()
-                        .url("httP://10.0.2.2/TEST/Latest/contests.php")
+                        .url("httP://10.0.2.2/TEST/Latest/contests.php?id="+i)
                         .build();
 
                 try
@@ -105,7 +111,7 @@ getContestsData();
                     {
 
                         JSONObject tempObject = jsonArray.getJSONObject(i);
-                       ContestsM mydata = new ContestsM();
+                       ContestsModel mydata = new ContestsModel();
                         mydata.setValue(tempObject.getString("value"));
                         mydata.setTotalUsersLimit(tempObject.getString("total_spots"));
 
@@ -129,9 +135,9 @@ getContestsData();
     public static class CustomAdapter extends RecyclerView.Adapter<CONTESTS.CustomAdapter.ViewHolder>
     {
         Context context;
-        List<ContestsM> my_data;
+        List<ContestsModel> my_data;
 
-        public CustomAdapter(Context context,List<ContestsM> my_data) {
+        public CustomAdapter(Context context,List<ContestsModel> my_data) {
 
             this.context = context;
             this.my_data = my_data;
@@ -215,7 +221,7 @@ getContestsData();
                                                    @Override
                                                    public void onClick(View view) {
 
-                                                       Intent intent = new Intent(view.getContext(), TeamSelection2.class);
+                                                       Intent intent = new Intent(view.getContext(), TeamSelection.class);
                                                       // intent.putExtra("team_intent_one",holder.teamOne.getText());
                                                        //intent.putExtra("team_intent_two",holder.teamTwo.getText());
 
@@ -235,8 +241,9 @@ getContestsData();
         @Override
         public int getItemCount() {
 
-
+            System.out.println("this is sizo of contests"+my_data.size());
             return my_data.size();
+
 
         }
 

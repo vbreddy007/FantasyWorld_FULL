@@ -14,8 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applicationtest.vbr.designtest4.R;
-import com.applicationtest.vbr.designtest4.com.vbr.main.MainActivity;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -37,6 +36,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.matches.MainAcitvity;
+
 
 public class LoginAction extends AppCompatActivity {
 
@@ -50,12 +52,11 @@ public class LoginAction extends AppCompatActivity {
     TextView mSignup;
     TextView mSignupEmail;
     TextView mSignupPassword;
-   Button loginButton ;
-    private static int RC_SIGN_IN = 123;
-   LoginButton fb_signin;
-
-    private static final int REQUEST_SIGNUP = 0;
-     ProgressDialog progressDialog;
+    Button loginButton ;
+    private static int RC_SIGN_IN = 1234;
+    LoginButton fb_signin;
+    private static final int REQUEST_SIGNUP = 01;
+    ProgressDialog progressDialog;
 
 
 
@@ -65,10 +66,11 @@ public class LoginAction extends AppCompatActivity {
 
         mCallbackManager = CallbackManager.Factory.create();
         super.onCreate(savedInstanceState);
-
-
-setContentView(R.layout.floating_labels);
-
+        setContentView(R.layout.floating_labels);
+        progressDialog  = new ProgressDialog(LoginAction.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Authenticating ....");
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         mAuth = FirebaseAuth.getInstance();
@@ -76,14 +78,10 @@ setContentView(R.layout.floating_labels);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
                 if(firebaseAuth.getCurrentUser()!=null)
                 {
-
                     Log.d(TAG,"in side authstatechanged");
-                    Intent i  = new Intent(LoginActivity1.this , MainActivity.class);
-
-
+                    Intent i  = new Intent(LoginAction.this , MainAcitvity.class);
                     startActivity(i);
 
                 }
@@ -96,17 +94,13 @@ setContentView(R.layout.floating_labels);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this ,new  GoogleApiClient.OnConnectionFailedListener()
-
                 {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
                         Toast.makeText(getApplicationContext(),"check connection",Toast.LENGTH_LONG).show();
                     }
-                })
-
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+                }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 
 
 
@@ -114,6 +108,8 @@ setContentView(R.layout.floating_labels);
         userEmail = (TextView) findViewById(R.id.user_email);
         userPassword = (TextView)findViewById(R.id.user_password);
         mSignup  = (TextView) findViewById(R.id.signup);
+        fb_signin=(LoginButton) findViewById(R.id.fb_login_button);
+        fb_signin.setReadPermissions("public_profile","email");
         findViewById(R.id.google_signin)
 
         .setOnClickListener(new View.OnClickListener() {
@@ -125,20 +121,14 @@ setContentView(R.layout.floating_labels);
             }
         });
 
-        fb_signin=(LoginButton) findViewById(R.id.fb_login_button);
-        fb_signin.setReadPermissions("public_profile","email");
-
 
         fb_signin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                Intent i = new Intent(getApplicationContext(),MainAcitvity.class);
                 startActivity(i);
                 handleFacebookAccessToken(loginResult.getAccessToken());
-
-
-
             }
 
             @Override
@@ -183,7 +173,7 @@ setContentView(R.layout.floating_labels);
             public void onClick(View view) {
 
 
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignupAction.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
 
 
@@ -246,15 +236,16 @@ setContentView(R.layout.floating_labels);
   private void  handleSignInResult(GoogleSignInResult result)
     {
 
-
         if (result.isSuccess()) {
+
+            Intent i = new Intent(getApplicationContext(),MainAcitvity.class);
+            startActivity(i);
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
            // updateUI(true);
             firebaseAuthWithGoogle(acct);
-            Intent i = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(i);
+
         } else {
             // Signed out, show unauthenticated UI.
             //updateUI(false);
@@ -333,10 +324,8 @@ Log.d(TAG,"inside on start");
         }
         loginButton.setEnabled(false);
         System.out.println("inside login and before progress dialog");
-         progressDialog  = new ProgressDialog(LoginActivity1.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating ....");
-        progressDialog.show();
+
+
 
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -359,7 +348,7 @@ Log.d(TAG,"inside on start");
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             System.out.println("this is current user" + user.toString());
 
-                            Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(),MainAcitvity.class);
                             startActivity(i);
                         }
 
@@ -416,7 +405,7 @@ Log.d(TAG,"inside on start");
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity1.this, "auth failed",
+                            Toast.makeText(LoginAction.this, "auth failed",
                                     Toast.LENGTH_SHORT).show();
                         }
 

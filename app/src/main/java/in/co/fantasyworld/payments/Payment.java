@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.applicationtest.vbr.designtest4.R;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.instamojo.android.Instamojo;
@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Date;
 
+import in.co.fantasyworld.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true"
+        android:background="@color/primary">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mToolbarLeaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:fitsSystemWindows="true"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leaderboard"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.CardView
+
+        android:id="@+id/cardview"
+        android:layout_width="fill_parent"
+
+
+        android:elevation="100dp"
+        android:background="#fff"
+
+        android:layout_height="75dp"
+        card:cardCornerRadius="4dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:orientation="vertical"
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+
+            android:paddingLeft="25dp"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/defpf"
+                android:layout_gravity="center_vertical"
+               />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <TextView
+                android:text="Teamname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                android:paddingTop="12dp"
+                android:id="@+id/team_name" />
+
+            <TextView
+                android:id="@+id/rank_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/team_name"
+                android:paddingLeft="25dp"
+                android:paddingTop="10dp"
+                android:text="Rank :"
+                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/team_name"
+                    android:text="10000"
+                    android:layout_toRightOf="@+id/rank_id"
+                    android:paddingTop="10dp"
+
+                    />
+                <TextView
+                    android:id="@+id/points_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rank_id"
+                    android:text="Points :"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="70dp"
+                    android:layout_below="@+id/team_name"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/points_test"
+                    android:layout_below="@+id/team_name"
+                    android:paddingTop="10dp"
+                    android:text="3000"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

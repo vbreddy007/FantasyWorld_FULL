@@ -16,8 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applicationtest.vbr.designtest4.R;
-import com.applicationtest.vbr.designtest4.com.vbr.model.BowlersM;
+
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -26,21 +25,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.models.BowlersModel;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-/**
- * Created by C5245675 on 6/3/2017.
- */
 
 public class Bowlers extends Fragment {
 
 
     RecyclerView recyclerView;
-    List<BowlersM> bowlers_data_list = new ArrayList<>();
+    List<BowlersModel> bowlers_data_list = new ArrayList<>();
     CustomAdapter adapter;
-    TeamSelection2 teamSelection2;
+    TeamSelection teamSelection2;
 
 
     @Nullable
@@ -69,9 +66,9 @@ public class Bowlers extends Fragment {
     public static class CustomAdapter extends RecyclerView.Adapter<Bowlers.CustomAdapter.ViewHolder>
     {
         Context context;
-        List<BowlersM> my_data;
+        List<BowlersModel> my_data;
 
-        public CustomAdapter(Context context,List<BowlersM> my_data) {
+        public CustomAdapter(Context context,List<BowlersModel> my_data) {
 
             this.context = context;
             this.my_data = my_data;
@@ -134,7 +131,7 @@ public class Bowlers extends Fragment {
                     {
                         holder.cardView.setCardBackgroundColor(Color.BLACK);
                         isSelected = true;
-                        ((TeamSelection2)context).updateSelectedPlayers(player,name,true);
+                        ((TeamSelection)context).updateSelectedPlayers(player,name,true);
 
 
                     }
@@ -142,7 +139,7 @@ public class Bowlers extends Fragment {
                     {
                         holder.cardView.setCardBackgroundColor(Color.WHITE);
                         isSelected = false;
-                        ((TeamSelection2)context).updateSelectedPlayers(player,name,true);
+                        ((TeamSelection)context).updateSelectedPlayers(player,name,true);
 
                     }
 
@@ -192,7 +189,7 @@ public class Bowlers extends Fragment {
                     {
 
                         JSONObject tempObject = jsonArray.getJSONObject(i);
-                       BowlersM mydata = new BowlersM();
+                       BowlersModel mydata = new BowlersModel();
                         mydata.setPlayerID(tempObject.getString("player_id"));
                         mydata.setPlayerName(tempObject.getString("player_name"));
                         mydata.setPlayerImage(tempObject.getString("player_image"));

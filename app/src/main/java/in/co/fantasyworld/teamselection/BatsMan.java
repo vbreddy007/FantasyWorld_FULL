@@ -17,8 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.applicationtest.vbr.designtest4.R;
-import com.applicationtest.vbr.designtest4.com.vbr.model.BatsmanM;
+
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -27,6 +26,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.contests.ContestsAction;
+import in.co.fantasyworld.models.BatsmanModel;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -38,9 +40,9 @@ import okhttp3.Response;
 public class BatsMan extends Fragment {
 
     RecyclerView recyclerView;
-    List<BatsmanM> batsman_data_list = new ArrayList<>();
+    List<BatsmanModel> batsman_data_list = new ArrayList<>();
     CustomAdapter adapter;
-    TeamSelection2 teamSelection2;
+    TeamSelection teamSelection2;
 
 
     @Nullable
@@ -59,6 +61,9 @@ public class BatsMan extends Fragment {
         adapter = new CustomAdapter(getActivity(),batsman_data_list);
         System.out.println("method inside setup recyclerview");
 
+        //String one = ((ContestsAction)getActivity()).getTeamOne();
+        //System.out.println("this is team passed"+one);
+
         recyclerView.setAdapter(adapter);
 
     }
@@ -69,9 +74,9 @@ public class BatsMan extends Fragment {
     public static class CustomAdapter extends RecyclerView.Adapter<BatsMan.CustomAdapter.ViewHolder>
     {
         Context context;
-        List<BatsmanM> my_data;
+        List<BatsmanModel> my_data;
 
-        public CustomAdapter(Context context,List<BatsmanM> my_data) {
+        public CustomAdapter(Context context,List<BatsmanModel> my_data) {
 
             this.context = context;
             this.my_data = my_data;
@@ -134,14 +139,14 @@ public class BatsMan extends Fragment {
                     {
                         holder.cardView.setCardBackgroundColor(Color.BLACK);
                         isSelected = true;
-                        ((TeamSelection2)context).updateSelectedPlayers(player,name,true);
+                        ((TeamSelection)context).updateSelectedPlayers(player,name,true);
 
                     }
                     else
                     {
                         holder.cardView.setCardBackgroundColor(Color.WHITE);
                         isSelected = false;
-                        ((TeamSelection2)context).updateSelectedPlayers(player,name,false);
+                        ((TeamSelection)context).updateSelectedPlayers(player,name,false);
 
                     }
 
@@ -159,37 +164,49 @@ public class BatsMan extends Fragment {
 
         @Override
         public int getItemCount() {
+
+            System.out.println("This is batsman size"+my_data.size());
             return my_data.size();
 
         }
 
     }
+
+
     private void loadbatsman()
+
+
     {
+
+        final String var = ((TeamSelection)getActivity()).getOne();
         AsyncTask<Void,Void,Void> task = new AsyncTask<Void,Void,Void>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
             }
 
+
+
             @Override
             protected Void doInBackground(Void... params) {
 
                 try
                 {
+
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php")
+                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php?var="+var)
                             .build();
 
                     Response response = client.newCall(request).execute();
+                   // System.out.println("this is batsman response"+response.body().string());
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray = jsonObject.getJSONArray("batsman");
                     for(int i=0 ; i<jsonArray.length();i++)
                     {
 
                         JSONObject tempObject = jsonArray.getJSONObject(i);
-                        BatsmanM mydata = new BatsmanM();
+                        BatsmanModel mydata = new BatsmanModel();
                         mydata.setPlayerID(tempObject.getString("player_id"));
                         mydata.setPlayerName(tempObject.getString("player_name"));
                         mydata.setPlayerImage(tempObject.getString("player_image"));

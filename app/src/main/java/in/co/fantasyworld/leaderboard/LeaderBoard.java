@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.applicationtest.vbr.designtest4.R;
+
 
 import java.util.List;
+
+import in.co.fantasyworld.R;
+import in.co.fantasyworld.models.LeaderBoardModel;
 
 /**
  * Created by C5245675 on 5/25/2017.
@@ -44,8 +47,8 @@ public class LeaderBoard extends AppCompatActivity {
 
 
 
-        List<LeaderboardData> my_data;
-        public CustomAdapterDash(Context context,List<LeaderboardData> my_data) {
+        List<LeaderBoardModel> my_data;
+        public CustomAdapterDash(Context context,List<LeaderBoardModel> my_data) {
 
             this.context = context;
             this.my_data = my_data;
@@ -55,7 +58,7 @@ public class LeaderBoard extends AppCompatActivity {
         @Override
         public LeaderBoard.CustomAdapterDash.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerlist_item,parent,false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.leaderboard_card,parent,false);
 
             return new LeaderBoard.CustomAdapterDash.ViewHolder(itemView);
 

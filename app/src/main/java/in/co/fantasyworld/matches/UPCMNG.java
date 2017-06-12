@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -101,7 +103,7 @@ public class UPCMNG extends Fragment {
                 OkHttpClient client = new OkHttpClient();
                 System.out.println("connection trying");
                 Request request = new Request.Builder()
-                        .url("httP://10.0.2.2/TEST/Latest?id="+id)
+                        .url("httP://10.0.2.2/TEST/Latest/loadmatches.php")
                         .build();
                 System.out.println("connection success");
 
@@ -123,9 +125,16 @@ public class UPCMNG extends Fragment {
                     {
 
                         JSONObject tempObject = jsonArray.getJSONObject(i);
-                        MatchesDataModel mydata = new MatchesDataModel(tempObject.getString("match_title"),
-                                tempObject.getString("team_one"),tempObject.getString("team_two"),tempObject.getString("team_one_icon"),tempObject.getString("team_one_icon"));
-                        data_list.add(mydata);
+                        MatchesDataModel model = new MatchesDataModel();
+                        model.setMatchid(tempObject.getString("match_id"));
+                        model.setMatch_title(tempObject.getString("leaguename"));
+                        model.setTeam_one(tempObject.getString("team_one"));
+                        model.setTeam_two(tempObject.getString("team_two"));
+                        model.setTeam_one_icon(tempObject.getString("team_one_image"));
+                        model.setTeam_two_icon(tempObject.getString("team_two_image"));
+                        model.setCountdown(tempObject.getString("start_time_ms"));
+
+                        data_list.add(model);
 
                     }
 
@@ -159,9 +168,6 @@ System.out.println("this is IO Exception" +e.toString());
     public static class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>
     {
         Context context;
-
-
-
         List<MatchesDataModel> my_data;
         public CustomAdapter(Context context,List<MatchesDataModel> my_data) {
 
@@ -185,24 +191,25 @@ System.out.println("this is IO Exception" +e.toString());
             public TextView versus;
             public ImageView teamOneImage;
             public  ImageView teamTwoImage;
-            public CardView cardView;
 
+            public TextView countDowntime;
+            public TextView league;
+
+            public CardView cardView;
+            public TextView match;
+            long ln;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                this.league = (TextView)itemView.findViewById(R.id.leaguename);
                 this.teamOne = (TextView)itemView.findViewById(R.id.team1);
                 this.teamTwo = (TextView)itemView.findViewById(R.id.team2);
                 this.teamOneImage = (ImageView)itemView.findViewById(R.id.team1_image);
                 this.teamTwoImage = (ImageView)itemView.findViewById(R.id.team2_image);
                 this.cardView = (CardView) itemView.findViewById(R.id.cardlist_item);
+                this.countDowntime = (TextView)itemView.findViewById(R.id.count_time);
+                this.match = (TextView)itemView.findViewById(R.id.matchid);
 
-              /*  cardView.setOnClickListener(new
-                                                    View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            Toast.makeText(view.getContext(),"pressed",Toast.LENGTH_LONG).show();
-                                                        }
-                                                    });*/
             }
 
 
@@ -214,11 +221,28 @@ System.out.println("this is IO Exception" +e.toString());
         public void onBindViewHolder(final ViewHolder holder, int position) {
 
             Glide.with(context).load(my_data.get(position).getTeam_one_icon()).into(holder.teamOneImage);
-
             holder.teamOne.setText(my_data.get(position).getTeam_one());
-
+            holder.league.setText(my_data.get(position).getMatch_title());
+            holder.match.setText(my_data.get(position).getMatchid());
             holder.teamTwo.setText(my_data.get(position).getTeam_two());
             Glide.with(context).load(my_data.get(position).getTeam_two_icon()).into(holder.teamTwoImage);
+
+
+
+            String numberAsString = my_data.get(position).getCountdown();
+            long number = Long.parseLong(numberAsString);
+            CountDownTimer ct = new CountDownTimer(number,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    long l = (millisUntilFinished/1000)/60;
+                    holder.countDowntime.setText(""+l);
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
 
             holder.cardView.setOnClickListener(new View.OnClickListener()
             {
@@ -229,10 +253,12 @@ System.out.println("this is IO Exception" +e.toString());
                     Intent intent = new Intent(view.getContext(),ContestsAction.class);
                     intent.putExtra("team_intent_one",holder.teamOne.getText());
                     intent.putExtra("team_intent_two",holder.teamTwo.getText());
+                    intent.putExtra("match_intent_id",holder.match.getText());
+                    intent.putExtra("match_intent_count",holder.countDowntime.getText());
 
                     view.getContext().startActivity(intent);
 
-                   // Toast.makeText(view.getContext(),"pressed"+holder.teamOne.getText(),Toast.LENGTH_LONG).show();
+                   // Toast.makeText(view.getContext(),"pressed"+holder.match.getText().toString(),Toast.LENGTH_LONG).show();
                 }
             }
 

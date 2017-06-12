@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/contests_layout"
+    android:fitsSystemWindows="true"
+
+    android:orientation="vertical">
+
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swiperefreshlayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        >
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/contestsrecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+
+
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+
+
+
+
+
+
+</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

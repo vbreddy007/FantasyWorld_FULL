@@ -13,14 +13,36 @@ public class MatchesDataModel {
     String team_two;
     String team_one_icon;
     String team_two_icon;
+    String matchid;
+    String countdown;
 
-    public MatchesDataModel(String match_title, String team_one, String team_two, String team_one_icon, String team_two_icon) {
+    public MatchesDataModel() {
+    }
+
+    public MatchesDataModel(String match_id, String match_title, String team_one, String team_two, String team_one_icon, String team_two_icon, String countdown) {
+        this.matchid = match_id;
         this.match_title = match_title;
         this.match_score = match_score;
         this.team_one = team_one;
         this.team_two = team_two;
         this.team_one_icon = team_one_icon;
         this.team_two_icon = team_two_icon;
+        this.countdown = countdown;
+    }
+    public String getCountdown() {
+        return countdown;
+    }
+
+    public void setCountdown(String countdown) {
+        this.countdown = countdown;
+    }
+
+    public String getMatchid() {
+        return matchid;
+    }
+
+    public void setMatchid(String matchid) {
+        this.matchid = matchid;
     }
 
     public String getTeam_one_icon() {

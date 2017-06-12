@@ -2,19 +2,56 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="in.co.fantasyworld">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
+
+
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/DesignDemo">
+        <activity android:name=".extra.SplashScreenActivity">
+
+        </activity>
         <activity android:name=".matches.MainAcitvity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity android:name=".contests.ContestsAction">
+
+        </activity>
+        <activity android:name=".login.LoginAction">
+
+        </activity>
+        <activity android:name=".login.SignupAction">
+
+        </activity>
+        <activity android:name=".leaderboard.LeaderBoard">
+
+        </activity>
+        <activity android:name=".payments.Payment">
+
+        </activity>
+        <activity android:name=".payments.WalletActivity">
+
+        </activity>
+        <activity android:name=".teamselection.TeamSelection">
+
+        </activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 
 </manifest>

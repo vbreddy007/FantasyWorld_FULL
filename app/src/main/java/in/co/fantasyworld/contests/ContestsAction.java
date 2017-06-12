@@ -1,5 +1,6 @@
 package in.co.fantasyworld.contests;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -11,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.applicationtest.vbr.designtest4.R;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
+import in.co.fantasyworld.R;
 
 /**
  * Created by C5245675 on 5/30/2017.
@@ -23,6 +26,10 @@ import java.util.List;
 public class ContestsAction extends AppCompatActivity {
 
     private ViewPager viewPager;
+    Toolbar toolbar;
+    String match_intent_id;
+    static String match_intent_one;
+   String  match_intent_two;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,9 +37,16 @@ public class ContestsAction extends AppCompatActivity {
         setContentView(R.layout.contests_main);
 
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.contests_mToolbar);
+         toolbar = (Toolbar)findViewById(R.id.contests_mToolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        Intent i = getIntent();
+
+         match_intent_one = i.getStringExtra("team_intent_one");
+        match_intent_two = i.getStringExtra("team_intent_two");
+        match_intent_id= i.getStringExtra("match_intent_id");
+        String match_intent_count= i.getStringExtra("match_intent_count");
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,8 +80,22 @@ public class ContestsAction extends AppCompatActivity {
             }
         });
     }
+
+    public String getMatchID()
+    {
+       return match_intent_id;
+    }
+    public static String getTeamOne()
+    {
+        return match_intent_one;
+    }
+    public String getTeamTwo()
+    {
+        return match_intent_two;
+    }
+
     private void setupViewPager(ViewPager viewPager){
-        ContestsActivity1.ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ContestsAction.ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFrag(new CONTESTS(), "CONTESTS");
         adapter.addFrag(new PREDICTIONS(), "PREDICTIONS");

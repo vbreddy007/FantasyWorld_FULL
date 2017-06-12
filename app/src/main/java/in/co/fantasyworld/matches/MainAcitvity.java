@@ -83,10 +83,10 @@ public class MainAcitvity extends AppCompatActivity {
                 {
 
 
-                    Intent i  = new Intent(MainAcitvity.this , LoginAction.class);
+                    //Intent i  = new Intent(MainAcitvity.this , LoginAction.class);
 
 
-                    startActivity(i);
+                    //startActivity(i);
 
                 }
             }
