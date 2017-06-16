@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    xmlns:card="http://schemas.android.com/tools">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -33,7 +38,6 @@
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
     <android.support.v7.widget.CardView
 
         android:id="@+id/cardview"
@@ -57,84 +61,86 @@
             android:orientation="vertical"
             >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-
-            android:paddingLeft="25dp"
-
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/defpf"
-                android:layout_gravity="center_vertical"
-               />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                android:text="Teamname"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25dp"
-                android:paddingTop="12dp"
-                android:id="@+id/team_name" />
+                android:layout_height="75dp"
 
-            <TextView
-                android:id="@+id/rank_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/team_name"
                 android:paddingLeft="25dp"
-                android:paddingTop="10dp"
-                android:text="Rank :"
-                />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/team_name"
-                    android:text="10000"
-                    android:layout_toRightOf="@+id/rank_id"
-                    android:paddingTop="10dp"
 
-                    />
-                <TextView
-                    android:id="@+id/points_test"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/rank_id"
-                    android:text="Points :"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="70dp"
-                    android:layout_below="@+id/team_name"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/points_test"
-                    android:layout_below="@+id/team_name"
-                    android:paddingTop="10dp"
-                    android:text="3000"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/defpf"
+                    android:layout_gravity="center_vertical"
                     />
 
-            </RelativeLayout>
-        </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="Teamname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="12dp"
+                        android:id="@+id/team_name" />
+
+                    <TextView
+                        android:id="@+id/rank_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/team_name"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="10dp"
+                        android:text="Rank :"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/team_name"
+                        android:text="10000"
+                        android:layout_toRightOf="@+id/rank_id"
+                        android:paddingTop="10dp"
+
+                        />
+                    <TextView
+                        android:id="@+id/points_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/rank_id"
+                        android:text="Points :"
+                        android:paddingTop="10dp"
+                        android:paddingLeft="70dp"
+                        android:layout_below="@+id/team_name"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/points_test"
+                        android:layout_below="@+id/team_name"
+                        android:paddingTop="10dp"
+                        android:text="3000"
+                        />
+
+                </RelativeLayout>
+            </LinearLayout>
 
 
 
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/darker_gray" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewLeaderBoard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -145,3 +151,4 @@
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

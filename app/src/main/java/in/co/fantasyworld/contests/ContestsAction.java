@@ -19,10 +19,6 @@ import java.util.List;
 
 import in.co.fantasyworld.R;
 
-/**
- * Created by C5245675 on 5/30/2017.
- */
-
 public class ContestsAction extends AppCompatActivity {
 
     private ViewPager viewPager;
