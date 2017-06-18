@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="in.co.fantasyworld">
+    package="in.co.fantasyworldT">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
@@ -19,10 +19,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/DesignDemo">
-        <activity android:name=".extra.SplashScreenActivity">
+        <activity android:name="in.co.fantasyworldT.extra.SplashScreenActivity">
 
         </activity>
-        <activity android:name=".matches.MainAcitvity">
+        <activity android:name="in.co.fantasyworldT.matches.MainAcitvity">
+
+
+        </activity>
+        <activity android:name="in.co.fantasyworldT.contests.ContestsAction">
+
+        </activity>
+        <activity android:name="in.co.fantasyworldT.login.LoginAction">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,28 +38,25 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".contests.ContestsAction">
+        <activity android:name="in.co.fantasyworldT.login.SignupAction">
 
         </activity>
-        <activity android:name=".login.LoginAction">
+        <activity android:name="in.co.fantasyworldT.leaderboard.LeaderBoard">
 
         </activity>
-        <activity android:name=".login.SignupAction">
+        <activity android:name="in.co.fantasyworldT.payments.Payment">
 
         </activity>
-        <activity android:name=".leaderboard.LeaderBoard">
+        <activity android:name="in.co.fantasyworldT.payments.WalletActivity">
 
         </activity>
-        <activity android:name=".payments.Payment">
-
-        </activity>
-        <activity android:name=".payments.WalletActivity">
-
-        </activity>
-        <activity android:name=".teamselection.TeamSelection">
+        <activity android:name="in.co.fantasyworldT.teamselection.TeamSelection">
 
         </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="20ccd81e8c6d4bc5171a8bf0dae5b93b3ac1ab37" />
     </application>
 
 </manifest>

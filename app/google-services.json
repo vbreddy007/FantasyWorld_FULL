@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "212760386118",
-    "firebase_url": "https://fantasyworld-56442.firebaseio.com",
-    "project_id": "fantasyworld-56442",
-    "storage_bucket": "fantasyworld-56442.appspot.com"
+    "project_number": "1067203094668",
+    "firebase_url": "https://fantasyworld-f08c5.firebaseio.com",
+    "project_id": "fantasyworld-f08c5",
+    "storage_bucket": "fantasyworld-f08c5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:212760386118:android:0be5b7279c48859e",
+        "mobilesdk_app_id": "1:1067203094668:android:0be5b7279c48859e",
         "android_client_info": {
           "package_name": "in.co.fantasyworld"
         }
       },
       "oauth_client": [
         {
-          "client_id": "212760386118-d70jvkd32peh4qborcrajklgv9ttfn5i.apps.googleusercontent.com",
+          "client_id": "1067203094668-q14jhfsip9h3hf3mrk343230fmgidk6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.fantasyworld",
+            "certificate_hash": "8e17eb690ae02e31cfb95130708faa5a6adec8c8"
+          }
+        },
+        {
+          "client_id": "1067203094668-5s9697j91bt02rs0eqtodfijd8geq2r3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCmgrHdGZsK1-9zh-FMjSww-4lZBNG8wcQ"
+          "current_key": "AIzaSyASjn4gTydEom2OUB6eX1k_fJRpeAqU0MQ"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067203094668-5s9697j91bt02rs0eqtodfijd8geq2r3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
