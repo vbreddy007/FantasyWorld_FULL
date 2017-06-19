@@ -24,8 +24,8 @@ public class ContestsAction extends AppCompatActivity {
     private ViewPager viewPager;
     Toolbar toolbar;
     String match_intent_id;
-    static String match_intent_one;
-   String  match_intent_two;
+    static String match_intent_one ,match_intent_two;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class ContestsAction extends AppCompatActivity {
         setContentView(R.layout.contests_main);
 
 
-         toolbar = (Toolbar)findViewById(R.id.contests_mToolbar);
+        toolbar = (Toolbar)findViewById(R.id.contests_mToolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         Intent i = getIntent();
@@ -85,7 +85,8 @@ public class ContestsAction extends AppCompatActivity {
     {
         return match_intent_one;
     }
-    public String getTeamTwo()
+
+    public static String getTeamTwo()
     {
         return match_intent_two;
     }

@@ -48,7 +48,8 @@ public class TeamSelection extends AppCompatActivity {
     int count = 0;
     Button save_team;
     String teamnameG;
-    String teamOne;
+    String teamOne,teamTwo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class TeamSelection extends AppCompatActivity {
         });
 
         teamOne = ContestsAction.getTeamOne();
+        teamTwo = ContestsAction.getTeamTwo();
 
         System.out.println("this is in team selection team one"+teamOne);
 
@@ -127,6 +129,10 @@ public class TeamSelection extends AppCompatActivity {
     public String getOne()
     {
         return teamOne;
+    }
+    public String getTwo()
+    {
+        return teamTwo;
     }
     private void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());

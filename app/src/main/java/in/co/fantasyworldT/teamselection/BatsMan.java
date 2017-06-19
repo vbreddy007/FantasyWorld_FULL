@@ -178,6 +178,7 @@ public class BatsMan extends Fragment {
     {
 
         final String var = ((TeamSelection)getActivity()).getOne();
+        final String var2 = ((TeamSelection)getActivity()).getTwo();
         AsyncTask<Void,Void,Void> task = new AsyncTask<Void,Void,Void>() {
             @Override
             protected void onPreExecute() {
@@ -194,7 +195,7 @@ public class BatsMan extends Fragment {
 
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php?var="+var)
+                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php?var="+var2)
                             .build();
 
                     Response response = client.newCall(request).execute();

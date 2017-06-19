@@ -55,26 +55,31 @@
 
            <RelativeLayout
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content">
+               android:layout_height="wrap_content"
+               android:layout_gravity="center">
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:text="SAVE"
                 android:id="@+id/team_save"
+                android:background="#178c0f"
+                android:gravity="center"
                 android:layout_alignParentStart="true"
               android:paddingLeft="15dp"
                 />
            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/teamselection2_team_count"
                 android:text="0/11"
+                android:textSize="25dp"
                 android:layout_alignParentEnd="true"
-                android:paddingRight="25dp"
+                android:paddingRight="35dp"
 
                 />
             </RelativeLayout>
