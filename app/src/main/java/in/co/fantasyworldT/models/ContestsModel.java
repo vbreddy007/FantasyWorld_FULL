@@ -11,10 +11,20 @@ public class ContestsModel {
     String NoOfusersJoined;
     String TotalUsersLimit;
 
+
+    String Entryfee;
+
     public ContestsModel() {
     }
 
 
+    public String getEntryfee() {
+        return Entryfee;
+    }
+
+    public void setEntryfee(String entryfee) {
+        Entryfee = entryfee;
+    }
 
     public String getNoOfusersJoined() {
         return NoOfusersJoined;

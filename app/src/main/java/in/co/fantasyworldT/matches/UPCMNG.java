@@ -1,5 +1,6 @@
 package in.co.fantasyworldT.matches;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,10 +43,12 @@ public class UPCMNG extends Fragment {
     RecyclerView recyclerView;
     List<MatchesDataModel> data_list = new ArrayList<>();
     CustomAdapter adapter;
+    private ProgressDialog dialog;
 
 
 
     RecyclerView.LayoutManager layoutManager;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     public boolean isConnected()
@@ -60,6 +64,12 @@ public class UPCMNG extends Fragment {
     @Override
     public void onStart() {
         if(isConnected()) {
+
+            //preparing dialog
+            dialog = new ProgressDialog(getActivity());
+            dialog.setIndeterminate(true);
+            dialog.setMessage("please wait...");
+            dialog.setCancelable(false);
             loadDataFromServer(0);
             Toast.makeText(getActivity().getApplicationContext(),"you are  connected",Toast.LENGTH_LONG).show();
             super.onStart();
@@ -78,9 +88,31 @@ public class UPCMNG extends Fragment {
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swiperefreshlayoutmatches);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadAllData();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
 
         return rootView;
+    }
+
+    private void  reloadAllData()
+    {
+        data_list.clear();
+       loadDataFromServer(1);
+
+
+        setupRecyclerView(recyclerView);
+        adapter.notifyDataSetChanged();
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView){
@@ -94,10 +126,24 @@ public class UPCMNG extends Fragment {
 
 
     private void loadDataFromServer(final int id)
+
     {
+
         AsyncTask<Void,Void,Void> task = new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                dialog.show();
+
+            }
+
+
             @Override
             protected Void doInBackground(Void... voids) {
+
+                //httP://10.0.2.2/TEST/Latest/loadmatches.php   url for local test
+                //http://www.fantasyworld.co.in/fwpreprod/loadmatches.php
 
                 OkHttpClient client = new OkHttpClient();
                 System.out.println("connection trying");
@@ -155,6 +201,8 @@ System.out.println("this is IO Exception" +e.toString());
             @Override
             protected void onPostExecute(Void aVoid) {
                 adapter.notifyDataSetChanged();
+
+                dialog.cancel();
             }
 
         };
@@ -229,19 +277,22 @@ System.out.println("this is IO Exception" +e.toString());
 
 
             String numberAsString = my_data.get(position).getCountdown();
-            long number = Long.parseLong(numberAsString);
+
+            holder.countDowntime.setText(numberAsString);
+
+           /* long number = Long.parseLong(numberAsString);
             CountDownTimer ct = new CountDownTimer(number,1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     long l = (millisUntilFinished/1000)/60;
-                    holder.countDowntime.setText(""+l);
+                   // holder.countDowntime.setText(""+l);
                 }
 
                 @Override
                 public void onFinish() {
 
                 }
-            }.start();
+            }.start();*/
 
             holder.cardView.setOnClickListener(new View.OnClickListener()
             {

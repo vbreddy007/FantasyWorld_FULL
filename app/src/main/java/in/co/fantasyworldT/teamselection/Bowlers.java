@@ -165,7 +165,11 @@ public class Bowlers extends Fragment {
 
     }
     private void loadbowlers()
+
     {
+        final String var = ((TeamSelection)getActivity()).getOne();
+        final String var2 = ((TeamSelection)getActivity()).getTwo();
+        final String var3 = "bow";
         AsyncTask<Void,Void,Void> task = new AsyncTask<Void,Void,Void>() {
             @Override
             protected void onPreExecute() {
@@ -174,12 +178,14 @@ public class Bowlers extends Fragment {
 
             @Override
             protected Void doInBackground(Void... params) {
+String URLq = "\"http://10.0.2.2/TEST/Latest/getBatsman.php?var=\"+var+\"&var2=\"+var2+\"&var3=\"+var3";
+                String URLpre = "http://www.fantasyworld.co.in/fwpreprod/getBatsman.php?var=\"+var+\"&var2=\"+var2+\"&var3=\"+var3";
 
                 try
                 {
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php")
+                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php?var="+var+"&var2="+var2+"&var3="+var3)
                             .build();
 
                     Response response = client.newCall(request).execute();

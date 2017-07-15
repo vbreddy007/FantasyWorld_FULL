@@ -373,7 +373,7 @@ public class Payment extends AppCompatActivity {
     private HttpUrl.Builder getHttpURLBuilder() {
         return new HttpUrl.Builder()
                 .scheme("https")
-                .host("api.instamojo.com");
+                .host("sample-sdk-server.instamojo.com");
     }
 
     @Override

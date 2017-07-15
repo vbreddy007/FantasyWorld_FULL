@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +27,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by C5245675 on 5/25/2017.
- */
 
 public class LeaderBoard extends AppCompatActivity {
 
@@ -36,6 +34,7 @@ public class LeaderBoard extends AppCompatActivity {
     List<LeaderBoardModel> leaderBoardModelList = new ArrayList<>();
     CustomAdapterDash adapter;
     RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +43,8 @@ public class LeaderBoard extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbarLeaderboard);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewLeaderBoard);
         setSupportActionBar(toolbar);
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefreshleaderboard);
+
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -57,10 +58,23 @@ public class LeaderBoard extends AppCompatActivity {
         setupRecyclerView(recyclerView);
 
 
+         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+             @Override
+             public void onRefresh() {
+                 reloadLeaderboard();
+             }
+         });
 
 
 
-
+    }
+    private void reloadLeaderboard()
+    {
+        leaderBoardModelList.clear();
+        loadboardDetails();
+        setupRecyclerView(recyclerView);
+        adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView){
@@ -102,6 +116,7 @@ public class LeaderBoard extends AppCompatActivity {
                         leaderBoardModel.setRank(tempObject.getString("n"));
 
                         leaderBoardModelList.add(leaderBoardModel);
+                        System.out.println("called leaderboard model when adding");
 
 
 
@@ -194,7 +209,7 @@ public class LeaderBoard extends AppCompatActivity {
             holder.user_team.setText(my_data.get(position).getName());
             holder.user_points.setText(my_data.get(position).getPoints());
 
-
+           System.out.println("in on bind view holder while setting values" );
 
 
 

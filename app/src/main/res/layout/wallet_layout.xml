@@ -37,9 +37,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
                     <TextView
+                        android:id="@+id/totalbalance_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12"
+
                         android:textSize="12dp"
                         />
 
@@ -90,6 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
                     <TextView
+                        android:id="@+id/bonousamount_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12"
@@ -127,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
                     <TextView
+                        android:id="@+id/totalwinnings_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12"

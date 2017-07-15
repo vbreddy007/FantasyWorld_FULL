@@ -1,22 +1,29 @@
 package in.co.fantasyworldT.teamselection;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,18 +31,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.okhttp.MediaType;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import in.co.fantasyworldT.R;
 import in.co.fantasyworldT.contests.ContestsAction;
+import in.co.fantasyworldT.leaderboard.LeaderBoard;
 import in.co.fantasyworldT.payments.Payment;
+import okhttp3.FormBody;
 
-/**
- * Created by C5245675 on 6/3/2017.
- *
- */
 
 public class TeamSelection extends AppCompatActivity {
 
@@ -49,11 +59,23 @@ public class TeamSelection extends AppCompatActivity {
     Button save_team;
     String teamnameG;
     String teamOne,teamTwo;
+    FirebaseUser firebaseUser;
+    String teamstring,teamnamestring;
+    private ProgressDialog dialog;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teamselection);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setMessage("please wait...");
+        dialog.setCancelable(false);
+
 
         viewPager = (ViewPager)findViewById(R.id.viewpager_teamselection2);
         setupViewPager(viewPager);
@@ -72,11 +94,6 @@ public class TeamSelection extends AppCompatActivity {
         teamTwo = ContestsAction.getTeamTwo();
 
         System.out.println("this is in team selection team one"+teamOne);
-
-
-
-
-
         final TextView select_hint = (TextView) findViewById(R.id.selction_hint);
 
         tabLayout = (TabLayout)findViewById(R.id.tabLayout_teamselection2);
@@ -208,6 +225,106 @@ public class TeamSelection extends AppCompatActivity {
 
     }
 
+    void sendTeamMethod() {
+
+        AsyncTask<Void,Void,Void> sendteamTask = new AsyncTask<Void,Void,Void>() {
+
+            @Override
+            protected void onPreExecute() {
+
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... urls) {
+
+                MediaType mt = MediaType.parse("application/json; charset=utf-8");
+                JSONObject jsonObject = new JSONObject();
+                String json;
+
+                try {
+
+                    System.out.println("background task of send team is executing");
+
+                    // JSONObject ob = jsonObject.accumulate("team", teamStringforJSON.toString());
+
+                   // JSONObject ob = new JSONObject();
+                   // ob.put("team",teamStringforJSON.toString());
+                    //ob.put("teamname",teamnameG);
+
+                    //ystem.out.println("JSONOBJECT accumuluted " + ob.toString());
+
+
+
+                    okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+                    //   RequestBody body = RequestBody.create(mt, ob.toString());
+
+                    // RequestBody body = new MultipartBuilder()
+
+                    // .addFormDataPart("team",ob.toString()).build();
+
+
+
+                    // in okHttp 3.x
+                    FormBody.Builder formBuilder = new FormBody.Builder()
+                            .add("team",teamstring.toString());
+
+
+
+                    formBuilder.add("teamname",teamnamestring);
+
+                    if(firebaseUser!=null)
+                    {
+
+                        String uName= firebaseUser.getDisplayName();
+                        String uEmail = firebaseUser.getEmail();
+
+                        if(uEmail != null)
+                        {
+                            formBuilder.add("useremail",uEmail);
+                        }
+                    }
+
+
+
+                    okhttp3.RequestBody  body = formBuilder.build();
+
+                    okhttp3.Request request = new okhttp3.Request.Builder()
+                            .url("http://10.0.2.2/TEST/Latest/readteam.php")
+                            .post(body)
+                            .build();
+
+                    System.out.println("This is post body "+body.toString());
+
+                    okhttp3.Response response = client.newCall(request).execute();
+                    String responseS = response.body().string();
+
+                    Log.i("@", "" + responseS);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                dialog.dismiss();
+            }
+        };
+        sendteamTask.execute();
+
+
+
+    }
+
     public void teamnameDialog()
     {
 
@@ -222,21 +339,46 @@ public class TeamSelection extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                teamstring=android.text.TextUtils.join(",", selectedPlayerListName);
+                teamnamestring = _temaname.getText().toString();
 
-                Toast.makeText(getApplicationContext(),_temaname.getText().toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),_temaname.getText().toString()+"and",Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(TeamSelection.this, Payment.class);
+                Intent i = new Intent(TeamSelection.this, LeaderBoard.class);
+
+                sendTeamMethod();
 
                 Bundle b = new Bundle();
-                b.putStringArrayList("list",selectedPlayerListName);
-                i.putExtra("list",b);
+               // b.putStringArrayList("list",selectedPlayerListName);
+               // i.putExtra("list",b);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+                finish();
+
 
 
             }
         });
 
         alertDialog.show();
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int displayWidth = displayMetrics.widthPixels;
+        int displayHeight = displayMetrics.heightPixels;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(alertDialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (displayWidth * 0.8f);
+        // Set alert dialog height equal to screen height 70%
+        int dialogWindowHeight = (int) (displayHeight * 0.3f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        alertDialog.getWindow().setAttributes(layoutParams);
+
+
+
+
 
         ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                 .setEnabled(false);
@@ -272,7 +414,36 @@ _temaname.addTextChangedListener(new TextWatcher() {
 
     }
 
+    public void onSuperBackPressed()
+    {
+        super.onBackPressed();
+    }
+    @Override
+    public void onBackPressed() {
 
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(TeamSelection.this).create();
+        alertDialog.setTitle("Warning :");
+        alertDialog.setCancelable(false);
+        alertDialog.setMessage("Selected team will not be saved. Still want to go back?");
+        alertDialog.setButton(Dialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                TeamSelection.this.onSuperBackPressed();
+
+            }
+        });
+        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
+    }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

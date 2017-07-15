@@ -2,6 +2,7 @@ package in.co.fantasyworldT.payments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.instamojo.android.Instamojo;
 import com.instamojo.android.activities.PaymentDetailsActivity;
 import com.instamojo.android.callbacks.OrderRequestCallBack;
@@ -31,17 +34,16 @@ import java.io.IOException;
 import java.util.Date;
 
 import in.co.fantasyworldT.R;
+import in.co.fantasyworldT.models.ContestsModel;
+import in.co.fantasyworldT.models.WalletModel;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
-
-/**
- * Created by C5245675 on 4/23/2017.
- */
-
 public class WalletActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -53,21 +55,51 @@ public class WalletActivity extends AppCompatActivity {
     TextInputEditText amountInput;
     private String accessToken = null;
     private ProgressDialog dialog;
+    String uName,uEmail;
+    FirebaseUser firebaseUser;
+    TextView mTotalbal,mBonus,mTotalWinnings;
+    WalletModel walletModel;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallet_layout);
 
-        //intializing payment gateway
-        Instamojo.initialize(this);
-        Instamojo.setBaseUrl("https://api.instamojo.com/");
 
         //preparing dialog
         dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setMessage("please wait...");
         dialog.setCancelable(false);
+
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        walletModel = new WalletModel();
+
+        if(firebaseUser != null)
+        {
+            uName= firebaseUser.getDisplayName();
+            uEmail = firebaseUser.getEmail();
+
+
+
+
+        }
+        loadWalletInfo();
+
+        mTotalbal = (TextView)findViewById(R.id.totalbalance_value);
+        mBonus   = (TextView) findViewById(R.id.bonousamount_value);
+        mTotalWinnings = (TextView) findViewById(R.id.totalwinnings_value);
+
+
+
+        //intializing payment gateway
+        Instamojo.initialize(this);
+        Instamojo.setBaseUrl("https://api.instamojo.com/");
+
+
 
         btn10 = (Button) findViewById(R.id.btn_10);
         btn20 = (Button) findViewById(R.id.btn_20);
@@ -128,6 +160,77 @@ public class WalletActivity extends AppCompatActivity {
 
 
     }
+
+
+    private void loadWalletInfo() {
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+
+                dialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                try {
+
+                    String URLtest ="http://10.0.2.2/TeST/Latest/wallet.php?";
+                    com.squareup.okhttp.OkHttpClient client = new com.squareup.okhttp.OkHttpClient();
+
+                    com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                            .url(URLtest+"email="+uEmail)
+                            .build();
+
+                    com.squareup.okhttp.Response response = client.newCall(request).execute();
+                    // System.out.println("this is response body"+response.body().string());
+
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonArray = jsonObject.getJSONArray("wallet");
+
+                    JSONObject temp = jsonArray.getJSONObject(0);
+
+
+
+
+
+                    walletModel.setTotalBalance(temp.getString("total_balance"));
+                    walletModel.setBonousAmount(temp.getString("bonus_amount"));
+                    walletModel.setTotalWinnings(temp.getString("total_winnings"));
+
+                    System.out.println("temp object"+temp+"and "+walletModel.getTotalBalance()+"and email"+uEmail);
+
+
+                    return null;
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                mBonus.setText(walletModel.getBonousAmount());
+                mTotalbal.setText(walletModel.getTotalBalance());
+                mTotalWinnings.setText(walletModel.getTotalWinnings());
+                dialog.cancel();
+            }
+        };
+        task.execute();
+    }
     private void fetchTokenAndTransactionID() {
 
         if (!dialog.isShowing()) {
@@ -174,11 +277,12 @@ public class WalletActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         errorMessage = "Failed to fetch Order tokens";
+                        e.printStackTrace();
                     }
 
                     final String finalErrorMessage = errorMessage;
                     Date d = new Date();
-                    final String finalTransactionID = "123456AdsfgdgdkjfBCDEqF";
+                    final String finalTransactionID = "123456AdsfgdgdkjfBCDEqFABCDefghhjkujad766748";
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -210,6 +314,78 @@ public class WalletActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    private void refundTheAmount(String transactionID, String amount) {
+        if (accessToken == null || transactionID == null || amount == null) {
+            return;
+        }
+
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+
+        showToast("Initiating a refund for - " + amount);
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl url = getHttpURLBuilder()
+                .addPathSegment("refund")
+                .addPathSegment("")
+                .build();
+
+        RequestBody body = new FormBody.Builder()
+
+                .add("transaction_id", transactionID)
+                .add("amount", amount)
+                .add("type", "PTH")
+                .add("body", "Refund the Amount")
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                        showToast("Failed to Initiate a refund");
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                        String message;
+
+                        if (response.isSuccessful()) {
+                            message = "Refund intiated successfully";
+                        } else {
+                            message = "Failed to Initiate a refund";
+                        }
+
+                        showToast(message);
+                    }
+                });
+            }
+        });
+    }
+
+
+
     private void createOrder(String accessToken, String transactionID) {
         String name;
         String email;
@@ -225,7 +401,7 @@ public class WalletActivity extends AppCompatActivity {
 
 
 
-        String phone = "9916897737";
+        String phone = "9912486412";
         String amount = amountInput.getText().toString();
         String description = "payment to play";
 
@@ -233,7 +409,7 @@ public class WalletActivity extends AppCompatActivity {
         Order order = new Order(accessToken, transactionID, name, email, phone, amount, description);
 
         //set webhook
-        order.setWebhook("http://your.server.com/webhook/");
+        order.setWebhook("http://www.fantasyworld.co.in/test/webhook1.php");
 
         //Validate the Order
         if (!order.isValid()) {
@@ -408,8 +584,11 @@ public class WalletActivity extends AppCompatActivity {
                             return;
                         }
 
+                        updatewallet(finalAmount);
+
                         showToast("Transaction Successful for id - " + finalPaymentID);
-                        // refundTheAmount(transactionID, finalAmount);
+                        System.out.println("transaction is sucessful");
+                        refundTheAmount(transactionID, finalAmount);
                     }
                 });
             }
@@ -421,7 +600,7 @@ public class WalletActivity extends AppCompatActivity {
     private HttpUrl.Builder getHttpURLBuilder() {
         return new HttpUrl.Builder()
                 .scheme("https")
-                .host("api.instamojo.com");
+                .host("sample-sdk-server.instamojo.com");
     }
 
     @Override
@@ -436,6 +615,7 @@ public class WalletActivity extends AppCompatActivity {
             // Check transactionID, orderID, and orderID for null before using them to check the Payment status.
             if (transactionID != null || paymentID != null) {
                 checkPaymentStatus(transactionID, orderID);
+
                 Log.d("payvbr",transactionID+ "and"+orderID);
             } else {
                 showToast("Oops!! Payment was cancelled");
@@ -448,43 +628,72 @@ public class WalletActivity extends AppCompatActivity {
 
 
 
-    private class ProgressTask extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected void onPreExecute(){
-            progressBar.setVisibility(View.VISIBLE);
-        }
+    private void updatewallet(final String amount)
+    {
+        final String[] status = new String[1];
 
-        @Override
-        protected Void doInBackground(Void... arg0) {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder().url("http://10.0.2.2/TEST/Latest/").build();
-
-            try
-            {
-                Response response = okHttpClient.newCall(request).execute();
-                JSONObject jsonObject = new JSONObject(response.body().string());
-                JSONArray jsonArray = jsonObject.getJSONArray("balance");
-                JSONObject tempObject = jsonArray.getJSONObject(0);
-                String user_bal  =  tempObject.getString("userbal");
-                String gift_mon =  tempObject.getString("giftmoney");
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
 
 
-            }
-            catch (Exception e)
-            {
-
+                dialog.show();
             }
 
-        return null;
-        }
+            @Override
+            protected Void doInBackground(Void... params) {
 
-        @Override
-        protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.GONE);
-            wall_bal.setText(" ₹ 1000");
+                try {
 
-            wall_bal.setText(""+user_bal);
-        }
+
+                    String URLtest ="http://10.0.2.2/TeST/Latest/updateWallwetOnPayment.php?";
+                    com.squareup.okhttp.OkHttpClient client = new com.squareup.okhttp.OkHttpClient();
+
+                    com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                            .url(URLtest+"email="+uEmail+"&amnt="+amount)
+                            .build();
+
+                    com.squareup.okhttp.Response response = client.newCall(request).execute();
+                    // System.out.println("this is response body"+response.body().string());
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+
+                    status[0] = jsonObject.getString("status");
+
+
+
+
+
+
+                    return null;
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                if(status[0].equalsIgnoreCase("sucess"))
+                {
+                    loadWalletInfo();
+                }
+
+                dialog.cancel();
+            }
+        };
+        task.execute();
+
+
     }
 }

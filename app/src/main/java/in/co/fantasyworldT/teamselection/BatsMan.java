@@ -1,6 +1,7 @@
 package in.co.fantasyworldT.teamselection;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +34,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by C5245675 on 6/3/2017.
- */
+
 
 public class BatsMan extends Fragment {
 
@@ -42,13 +42,31 @@ public class BatsMan extends Fragment {
     List<BatsmanModel> batsman_data_list = new ArrayList<>();
     CustomAdapter adapter;
     TeamSelection teamSelection2;
+    private ProgressDialog dialog;
 
+
+    @Override
+    public void onStart() {
+
+        //preparing dialog
+
+        super.onStart();
+
+
+        dialog = new ProgressDialog(getActivity());
+        dialog.setIndeterminate(true);
+        dialog.setMessage("please wait...");
+        dialog.setCancelable(false);
+
+        loadbatsman();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.batsman_layout, container, false);
-        loadbatsman();
+        //prgbar = (ProgressBar)rootView.findViewById(R.id.prgbarteamselection);
+
         recyclerView = (RecyclerView)rootView.findViewById(R.id.batsman_recyclerview);
         setupRecyclerView(recyclerView);
 
@@ -179,10 +197,14 @@ public class BatsMan extends Fragment {
 
         final String var = ((TeamSelection)getActivity()).getOne();
         final String var2 = ((TeamSelection)getActivity()).getTwo();
+        final String var3 = "bat";
         AsyncTask<Void,Void,Void> task = new AsyncTask<Void,Void,Void>() {
             @Override
             protected void onPreExecute() {
+
                 super.onPreExecute();
+               // prgbar.setVisibility(View.VISIBLE);
+                dialog.show();
             }
 
 
@@ -193,9 +215,12 @@ public class BatsMan extends Fragment {
                 try
                 {
 
+                    String URLq = "\"http://10.0.2.2/TEST/Latest/getBatsman.php?var=\"+var+\"&var2=\"+var2+\"&var3=\"+var3";
+                    String URLpre = "http://www.fantasyworld.co.in/fwpreprod/getBatsman.php?var=\"+var+\"&var2=\"+var2+\"&var3=\"+var3";
+
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://10.0.2.2/TEST/Latest/getBatsman.php?var="+var2)
+                            .url("http://www.fantasyworld.co.in/fwpreprod/getBatsman.php?+var="+var+"&var2="+var2+"&var3="+var3)
                             .build();
 
                     Response response = client.newCall(request).execute();
@@ -228,6 +253,8 @@ public class BatsMan extends Fragment {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
+               // prgbar.setVisibility(View.INVISIBLE);
+                dialog.cancel();
             }
         } ;
         task.execute();

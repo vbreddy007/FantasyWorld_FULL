@@ -1,5 +1,6 @@
 package in.co.fantasyworldT.contests;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.co.fantasyworldT.R;
+import in.co.fantasyworldT.adapters.CustomAdapterContests;
 import in.co.fantasyworldT.models.ContestsModel;
 import in.co.fantasyworldT.teamselection.TeamSelection;
 
@@ -35,9 +37,10 @@ public class CONTESTS extends Fragment {
 
     RecyclerView recyclerView;
     List<ContestsModel> data_list = new ArrayList<>();
-    CustomAdapter adapter;
+    CustomAdapterContests adapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
     int matchIDint;
+    private ProgressDialog dialog;
 
 
 
@@ -46,41 +49,32 @@ public class CONTESTS extends Fragment {
 
         View rootView = inflater.inflate(R.layout.contests_layout, container, false);
         recyclerView = (RecyclerView)rootView.findViewById(R.id.contestsrecyclerView);
-        setupRecyclerView(recyclerView);
+
+
+
+
         String matchID = ((ContestsAction)getContext()).getMatchID();
 
         matchIDint = Integer.parseInt(matchID);
-        getContestsData(matchIDint);
+        //getContestsData(matchIDint);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swiperefreshlayout);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reloadAllData();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        setupRecyclerView(recyclerView);
+
+
+
 
 
 
         return rootView;
     }
 
-    private void reloadAllData()
-    {
-        data_list.clear();
-        getContestsData(matchIDint);
 
-
-        setupRecyclerView(recyclerView);
-        adapter.notifyDataSetChanged();
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
     private void setupRecyclerView(RecyclerView recyclerView){
 
         recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(),2));
-        adapter = new CONTESTS.CustomAdapter(getActivity(),data_list);
+        adapter = new CustomAdapterContests(getActivity(),((ContestsAction)getContext()).data_list);
+        System.out.println("this is inside setiprecycler view and after adapter"+adapter.toString());
         recyclerView.setAdapter(adapter);
 
 
@@ -91,31 +85,48 @@ public class CONTESTS extends Fragment {
     {
 
         AsyncTask<Void,Void,Void> asyncTask = new AsyncTask<Void,Void,Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                dialog.show();
+            }
+
+
+
             @Override
             protected Void doInBackground(Void... params) {
 
 
+                String urlq =  "httP://10.0.2.2/TEST/Latest/contests.php?id=";
+               String urlpre = "http://www.fantasyworld.co.in/fwpreprod/contests.php?id=";
 
                 OkHttpClient client = new OkHttpClient();
-                System.out.println("connection trying");
+
                 Request request = new Request.Builder()
-                        .url("httP://10.0.2.2/TEST/Latest/contests.php?id="+i)
+                        .url(urlpre+i)
                         .build();
 
                 try
                 {
                     Response response = client.newCall(request).execute();
+                   // System.out.println("this is response body"+response.body().string());
+
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray = jsonObject.getJSONArray("contests");
                     for(int i=0 ; i<jsonArray.length();i++)
                     {
 
                         JSONObject tempObject = jsonArray.getJSONObject(i);
+                        System.out.println("this is inside for loop"+tempObject.toString());
                        ContestsModel mydata = new ContestsModel();
                         mydata.setValue(tempObject.getString("value"));
                         mydata.setTotalUsersLimit(tempObject.getString("total_spots"));
+                        mydata.setEntryfee(tempObject.getString("entryfee"));
+                        System.out.println("size of the mydata" +data_list.size());
 
                         data_list.add(mydata);
+                        System.out.println("size of the mydata" +data_list.size());
 
                     }
                 }
@@ -125,12 +136,18 @@ public class CONTESTS extends Fragment {
                 }
                 return null;
             }
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                dialog.cancel();
+            }
 
 
 
         };
         asyncTask.execute();
     }
+
 
     public static class CustomAdapter extends RecyclerView.Adapter<CONTESTS.CustomAdapter.ViewHolder>
     {
@@ -161,7 +178,7 @@ public class CONTESTS extends Fragment {
             public TextView percentage;
             public DonutProgress donutProgress;
             public TextView totalValue;
-            public TextView spotsValue;
+            public TextView spotsValue,mEntryFee;
 
 
 
@@ -174,6 +191,7 @@ public class CONTESTS extends Fragment {
                 this.donutProgress = (DonutProgress)itemView.findViewById(R.id.prg_bar);
                 this.totalValue = (TextView) itemView.findViewById(R.id.total_value);
                 this.spotsValue = (TextView)itemView.findViewById(R.id.total_spots_value);
+                this.mEntryFee  = (TextView)itemView.findViewById(R.id.entryfeevalue);
                 this.cardView = (CardView)itemView.findViewById(R.id.contests_card);
 
 
@@ -213,6 +231,7 @@ public class CONTESTS extends Fragment {
 
             holder.spotsValue.setText(my_data.get(position).getTotalUsersLimit());
             holder.totalValue.setText(my_data.get(position).getValue());
+            holder.mEntryFee.setText(my_data.get(position).getEntryfee());
 
 
             holder.cardView.setOnClickListener(new View.OnClickListener()
@@ -241,7 +260,7 @@ public class CONTESTS extends Fragment {
         @Override
         public int getItemCount() {
 
-            System.out.println("this is sizo of contests"+my_data.size());
+           System.out.println("this is size of the contests"+my_data.size());
             return my_data.size();
 
 
